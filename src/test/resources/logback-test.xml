@@ -1,0 +1,67 @@
+<configuration debug="false">
+
+    <property name="LOG_PATTERN" value="%d %-5p [%t] %c{0}:%line - %msg%n"/>
+
+    <!-- 本文主要输出日志为控制台日志，系统日志，sql日志，异常日志 -->
+    <!-- %m输出的信息, %p日志级别, %t线程名, %d日期, %c类的全名 -->
+    <!-- 控制台 -->
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${LOG_PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!-- 系统info级别日志 -->
+    <appender name="logFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- <File> 日志目录，没有会自动创建 -->
+        <File>logFile.log</File>
+        <!-- <rollingPolicy>日志策略，每天建立一个日志文件 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logFile.log.%d</fileNamePattern>
+        </rollingPolicy>
+        <!-- encoder 日志编码及输出格式 -->
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${LOG_PATTERN}</pattern>
+            <!-- 此处设置字符集 -->
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!-- 异常日志 -->
+    <appender name="errorFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>errorFile.log</File>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>errorFile.log.%d</fileNamePattern>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!--用来设置日志的输入格式-->
+            <pattern>${LOG_PATTERN}</pattern>
+            <!-- 此处设置字符集 -->
+            <charset>UTF-8</charset>
+        </encoder>
+
+        <!-- 日志都在这里 过滤出 error
+             使用 try {}catch (Exception e){} 的话异常无法写入日志，可以在catch里用logger.error()方法手动写入日志 -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    <!--打印sql至sqlFile文件日志-->
+    <logger name="com.atguigi.mianshi" level="ERROR" additivity="false">
+        <appender-ref ref="errorFile"/>
+    </logger>
+
+    <!-- 日志输出级别 -->
+    <!-- All\DEBUG\INFO\WARN\ERROR\FATAL\OFF -->
+    <!-- 打印info级别日志，分别在控制台，logFile，errorFile输出 异常日志在上面由过滤器过滤出ERROR日志打印 -->
+    <root level="INFO">
+        <appender-ref ref="errorFile"/>
+        <appender-ref ref="console"/>
+        <appender-ref ref="logFile"/>
+    </root>
+
+</configuration>
