@@ -10,12 +10,17 @@
             <pattern>${LOG_PATTERN}</pattern>
             <charset>UTF-8</charset>
         </encoder>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>DENY</onMatch>
+            <onMismatch>ACCEPT</onMismatch>
+        </filter>
     </appender>
 
     <!-- 系统info级别日志 -->
     <appender name="logFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <!-- <File> 日志目录，没有会自动创建 -->
-        <File>logFile.log</File>
+        <File>log/logFile.log</File>
         <!-- <rollingPolicy>日志策略，每天建立一个日志文件 -->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>logFile.log.%d</fileNamePattern>
@@ -26,11 +31,16 @@
             <!-- 此处设置字符集 -->
             <charset>UTF-8</charset>
         </encoder>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>DENY</onMatch>
+            <onMismatch>ACCEPT</onMismatch>
+        </filter>
     </appender>
 
     <!-- 异常日志 -->
     <appender name="errorFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <File>errorFile.log</File>
+        <File>log/errorFile.log</File>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>errorFile.log.%d</fileNamePattern>
         </rollingPolicy>
@@ -50,15 +60,10 @@
         </filter>
     </appender>
 
-    <!--打印sql至sqlFile文件日志-->
-    <logger name="com.atguigi.mianshi" level="ERROR" additivity="false">
-        <appender-ref ref="errorFile"/>
-    </logger>
-
     <!-- 日志输出级别 -->
     <!-- All\DEBUG\INFO\WARN\ERROR\FATAL\OFF -->
     <!-- 打印info级别日志，分别在控制台，logFile，errorFile输出 异常日志在上面由过滤器过滤出ERROR日志打印 -->
-    <root level="INFO">
+    <root level="debug">
         <appender-ref ref="errorFile"/>
         <appender-ref ref="console"/>
         <appender-ref ref="logFile"/>
