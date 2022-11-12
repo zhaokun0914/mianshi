@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.atomic.AtomicStampedReference;
 
 /**
- * 原子引用引起ABA问题å
+ * 原子引用引起ABA问题
  * @author Kavin
  * @date 2022/11/10 22:59
  */
